@@ -26,6 +26,7 @@ cliParser = CommandArguments
   <> short 'P'
   <> help "Show parent pids as well as child ones."
   <> metavar "PARENT"
+  <> value False
    )
 
 main :: IO ()
