@@ -18,7 +18,7 @@ import           Data.List             (foldl')
 import qualified Data.Map              as M
 import qualified Data.Set              as S
 import           Prelude               (Bool (..), IO, Int, Maybe (..), String,
-                                        filter, fmap, head, length, read, print,
+                                        filter, fmap, head, length, print, read,
                                         return, show, (!!), ($), (++), (/=),
                                         (>>=))
 import           System.Directory      (doesDirectoryExist, doesFileExist,
@@ -33,17 +33,17 @@ pidRegex = mkRegex "^/proc/([0-9]+)$"
 matchRegexBool :: Regex -> String -> Bool
 matchRegexBool regex str = case matchRegex regex str of
   Nothing -> False
-  Just _ -> True
+  Just _  -> True
 
 capturePidRegex :: String -> Maybe String
 capturePidRegex pid = case matchRegex pidRegex pid of
-  Nothing -> Nothing
+  Nothing               -> Nothing
   Just subexprMatchList -> Just (head subexprMatchList)
 
 appendMatchSubstrToList :: Regex -> [Int] -> String -> [Int]
 appendMatchSubstrToList regex list str =
   case matchRegex regex str of
-    Nothing -> list
+    Nothing           -> list
     Just subexprMatch -> (list ++ [(read (head subexprMatch) :: Int)])
 
 getPidInts :: [Int] -> String -> [Int]
