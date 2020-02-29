@@ -7,14 +7,13 @@ module Lib
 import           Control.Monad         (filterM, join, mapM)
 import           Data.ByteString       ()
 import qualified Data.ByteString       as B
-import           Data.ByteString.Char8 (lines, pack, unpack, words)
+import           Data.ByteString.Char8 (lines, unpack)
 import           Data.List             (foldl')
 import qualified Data.Map              as M
 import qualified Data.Set              as S
 import           Prelude               (Bool (..), IO, Int, Maybe (..), String,
-                                        filter, fmap, head, length, print, read,
-                                        return, show, (!!), ($), (++), (/=),
-                                        (>>=))
+                                        filter, fmap, head, read, return, show,
+                                        ($), (++), (>>=))
 import           System.Directory      (doesDirectoryExist, doesFileExist,
                                         listDirectory)
 import           System.IO             (IOMode (..), withFile)
