@@ -1,12 +1,15 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-module Main where
+module Main (main) where
 
 
 import           Control.Monad       (mapM_)
 import           Data.ByteString     ()
-import           Options.Applicative as A
-import           Prelude             (Bool (..), IO, Int, print, ($), (<>))
+import           Options.Applicative (Parser, auto, execParser, fullDesc,
+                                      header, help, helper, info, long, metavar,
+                                      option, progDesc, short, value, (<$>),
+                                      (<**>), (<*>))
+import           Prelude             (Bool (False), IO, Int, print, ($), (<>))
 
 import           Lib                 (getChildrenOp)
 
@@ -17,12 +20,12 @@ data CommandArguments = CommandArguments
 
 cliParser :: Parser CommandArguments
 cliParser = CommandArguments
-  <$> A.option A.auto
+  <$> option auto
    ( long "pid"
   <> short 'p'
   <> metavar "PID"
   <> help "Process ID of the process you want to get the children of."
-   ) <*> A.option A.auto
+   ) <*> option auto
    ( long "include-parents"
   <> short 'P'
   <> help "Show parent pids as well as child ones."
