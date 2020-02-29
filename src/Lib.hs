@@ -1,13 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Lib
-    ( getPIDPaths
-    , getPIDParent
-    , getParentPidList
-    , buildPIDChildrenMap
-    , getChildren
-    , matchRegex
-    , getChildrenOp
+    ( getChildrenOp
     ) where
 
 import           Control.Monad         (filterM, join, mapM)
@@ -34,11 +28,6 @@ matchRegexBool :: Regex -> String -> Bool
 matchRegexBool regex str = case matchRegex regex str of
   Nothing -> False
   Just _  -> True
-
-capturePidRegex :: String -> Maybe String
-capturePidRegex pid = case matchRegex pidRegex pid of
-  Nothing               -> Nothing
-  Just subexprMatchList -> Just (head subexprMatchList)
 
 appendMatchSubstrToList :: Regex -> [Int] -> String -> [Int]
 appendMatchSubstrToList regex list str =
