@@ -3,11 +3,12 @@
 module Main where
 
 
+import           Control.Monad       (mapM_)
 import           Data.ByteString     ()
 import           Options.Applicative as A
-import           Prelude             (Bool, IO, Int, return, (<>))
+import           Prelude             (Bool (..), IO, Int, print, ($), (<>))
 
-import           Lib
+import           Lib                 (getChildrenOp)
 
 data CommandArguments = CommandArguments
     { rootPidNumber          :: Int
@@ -37,4 +38,5 @@ main = do
         <> header "process-children -- Return the PIDs of children processes in an easily parse-able form."
         )
   args <- execParser opts
-  return ()
+  pid_list <- getChildrenOp $ rootPidNumber args
+  mapM_ print pid_list
