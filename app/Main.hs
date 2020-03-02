@@ -7,9 +7,9 @@ import           Control.Monad       (mapM_)
 import           Data.ByteString     ()
 import           Options.Applicative (Parser, auto, execParser, fullDesc,
                                       header, help, helper, info, long, metavar,
-                                      option, progDesc, short, value, (<$>),
-                                      (<**>), (<*>))
-import           Prelude             (Bool (False), IO, Int, print, (<>), (>>=))
+                                      option, progDesc, short, switch,
+                                      (<$>), (<**>), (<*>))
+import           Prelude             (Bool, IO, Int, print, (<>), (>>=))
 
 import           Lib                 (getChildren, getChildrenAndParent)
 
@@ -25,12 +25,10 @@ cliParser = CommandArguments
   <> short 'p'
   <> metavar "PID"
   <> help "Process ID of the process you want to get the children of."
-   ) <*> option auto
+   ) <*> switch
    ( long "include-parents"
   <> short 'P'
   <> help "Show parent pids as well as child ones."
-  <> metavar "PARENT"
-  <> value False
    )
 
 main :: IO ()
