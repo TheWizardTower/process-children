@@ -68,6 +68,14 @@ getPIDParent pid = do
 getParentPidList :: IO [Maybe (Int, Int)]
 getParentPidList = getPIDPaths >>= mapM getPIDParent
 
+recurseMap :: M.Map Int (S.Set Int) -> Int -> [Int]
+recurseMap map pid = do
+  let mapNodeMaybe = M.lookup pid map
+  case mapNodeMaybe of
+    Nothing -> []
+    Just set -> let list = S.toList set in
+      list ++ (recurseMap map =<< list)
+
 buildPIDChildrenMap :: [Maybe (Int, Int)] -> M.Map Int (S.Set Int)
 buildPIDChildrenMap =
   foldl' (\map maybePair ->
@@ -92,5 +100,5 @@ getChildrenOp :: Int -> IO [Int]
 getChildrenOp pidRoot = do
   ppid_list <- getParentPidList
   let map = buildPIDChildrenMap ppid_list
-      pidList = getChildren map pidRoot
+      pidList = recurseMap map pidRoot
   return pidList
