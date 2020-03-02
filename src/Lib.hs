@@ -2,6 +2,7 @@
 
 module Lib
     ( getChildrenOp
+    , getChildrenAndParent
     ) where
 
 import           Control.Monad         (filterM, mapM)
@@ -68,6 +69,18 @@ getPIDParent pid = do
 getParentPidList :: IO [Maybe (Int, Int)]
 getParentPidList = getPIDPaths >>= mapM getPIDParent
 
+buildPIDParentMap :: [Maybe (Int, Int)] -> M.Map Int (S.Set Int)
+buildPIDParentMap =
+  foldl' (\map maybePair ->
+    case maybePair of
+      Nothing -> map
+      Just (pid, pidParent) -> M.insertWith
+        S.union
+       pid
+       (S.singleton pidParent)
+       map
+  ) (M.fromList [])
+
 recurseMap :: M.Map Int (S.Set Int) -> Int -> [Int]
 recurseMap map pid = do
   let mapNodeMaybe = M.lookup pid map
@@ -88,13 +101,13 @@ buildPIDChildrenMap =
        map
   ) (M.fromList [])
 
-getChildren :: M.Map Int (S.Set Int) -> Int -> [Int]
-getChildren map pid = do
-  let childrenSetMaybe = M.lookup pid map
-  case childrenSetMaybe of
-    Nothing  -> []
-    Just set -> let list = S.toList set in
-        list ++ (getChildren map =<< list)
+getChildrenAndParent :: Int -> IO [Int]
+getChildrenAndParent pid = do
+  ppid_list <- getParentPidList
+  let childrenMap = buildPIDChildrenMap ppid_list
+      parentMap   = buildPIDParentMap ppid_list
+      pidlist = (recurseMap parentMap pid) ++ (recurseMap childrenMap pid)
+  return pidlist
 
 getChildrenOp :: Int -> IO [Int]
 getChildrenOp pidRoot = do
