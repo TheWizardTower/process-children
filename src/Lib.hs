@@ -14,7 +14,7 @@ import qualified Data.Set              as S
 import           Prelude               (Bool (False, True), IO, Int,
                                         Maybe (Just, Nothing), String, filter,
                                         fmap, head, read, return, show, ($),
-                                        (++), (>>=), (=<<))
+                                        (++), (=<<), (>>=))
 import           System.Directory      (doesDirectoryExist, doesFileExist,
                                         listDirectory)
 import           System.IO             (IOMode (ReadMode), withFile)
