@@ -9,9 +9,9 @@ import           Options.Applicative (Parser, auto, execParser, fullDesc,
                                       header, help, helper, info, long, metavar,
                                       option, progDesc, short, value, (<$>),
                                       (<**>), (<*>))
-import           Prelude             (Bool (False), IO, Int, print, ($), (<>))
+import           Prelude             (Bool (False), IO, Int, print, (<>), (>>=))
 
-import           Lib                 (getChildrenOp)
+import           Lib                 (getChildren, getChildrenAndParent)
 
 data CommandArguments = CommandArguments
     { rootPidNumber          :: Int
@@ -41,5 +41,7 @@ main = do
         <> header "process-children -- Return the PIDs of children processes in an easily parse-able form."
         )
   args <- execParser opts
-  pid_list <- getChildrenOp $ rootPidNumber args
-  mapM_ print pid_list
+  if includeParentProcesses args then
+    getChildrenAndParent (rootPidNumber args) >>= mapM_ print
+  else
+    getChildren (rootPidNumber args) >>= mapM_ print

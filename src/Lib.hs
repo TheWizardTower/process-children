@@ -1,7 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Lib
-    ( getChildrenOp
+    ( getChildren
     , getChildrenAndParent
     ) where
 
@@ -109,8 +109,8 @@ getChildrenAndParent pid = do
       pidlist = (recurseMap parentMap pid) ++ (recurseMap childrenMap pid)
   return pidlist
 
-getChildrenOp :: Int -> IO [Int]
-getChildrenOp pidRoot = do
+getChildren :: Int -> IO [Int]
+getChildren pidRoot = do
   ppid_list <- getParentPidList
   let map = buildPIDChildrenMap ppid_list
       pidList = recurseMap map pidRoot
